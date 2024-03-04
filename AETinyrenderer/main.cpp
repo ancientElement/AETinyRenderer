@@ -14,45 +14,103 @@ int xy_learp(int x0, int y0, float t, int x) {
 }
 
 void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
-	//1.只有三个点
-	////起点
-	//image.set(x0, y0, color);
-	////中点
-	//image.set((x0 + x1) / 2, (y0 + y1) / 2, color);
-	////终点
-	//image.set(x1, y1, color);
-	//2.使用线性插值
-	//用线性插值
-	//for (float i = 0; i < 1; i += 0.1f)
-	//{
-	//	float x = lerp(x0, x1, i);
-	//	float y = lerp(y0, y1, i);
-	//	image.set(x, y, color);
+	//4.优化代码 于原文一致
+	//bool t_more_than_1 = false;
+	////t大于1
+	//if (std::abs(y0 - y1) > std::abs(x0 - x1)) {
+	//	t_more_than_1 = true;
+	//	//交换坐标轴
+	//	std::swap(x0, y0);
+	//	std::swap(x1, y1);
 	//}
-	//3.使用函数 由于上面无论线段长度是多长,绘制的点数是固定的所以 多余了性能消耗
-	//考虑到坐标大小
+	////x0 > x1 交换左右点
+	//if (x0 > x1) {
+	//	std::swap(x0, x1);
+	//	std::swap(y0, y1);
+	//}
+	//for (int x = x0; x <= x1; x++)
+	//{
+	//	float t = (float)(y1 - y0) / (x1 - x0);
+	//	int  y = xy_learp(x0, y0, t, x);
+	//	if (t_more_than_1) {
+	//		image.set(y, x, color);
+	//	}
+	//	else
+	//	{
+	//		image.set(x, y, color);
+	//	}
+	//}
 
-	float t = (float)(y1 - y0) / (x1 - x0);
-	std::cout << t;
-	std::cout << "\n";
-	//改用y坐标系
-	if (t > 1) {
-		int miny = std::min(y0, y1);
-		int maxy = std::max(y0, y1);
-		for (int y = miny; y <= maxy; y++)
+
+	//5.使用误差优化
+	//bool t_more_than_1 = false;
+	////t大于1
+	//if (std::abs(y0 - y1) > std::abs(x0 - x1)) {
+	//	t_more_than_1 = true;
+	//	//交换坐标轴
+	//	std::swap(x0, y0);
+	//	std::swap(x1, y1);
+	//}
+	////x0 > x1 交换左右点
+	//if (x0 > x1) {
+	//	std::swap(x0, x1);
+	//	std::swap(y0, y1);
+	//}
+	//int dx = x1 - x0;
+	//int dy = y1 - y0;
+	//float derror = (float)dy / dx;
+	//float error = 0;
+	//int y = y0;
+	//for (int x = x0; x <= x1; x++)
+	//{
+	//	if (t_more_than_1) {
+	//		image.set(y, x, color);
+	//	}
+	//	else
+	//	{
+	//		image.set(x, y, color);
+	//	}
+	//	error += derror;
+	//	if (error > 0.5f)//如果累计步进长度到达一格
+	//	{
+	//		y += y1 > y0 ? 1 : -1;//向上或者向下走一格
+	//		error -= 1;
+	//	}
+	//}
+
+	//5.去除浮点数
+	bool t_more_than_1 = false;
+	//t大于1
+	if (std::abs(y0 - y1) > std::abs(x0 - x1)) {
+		t_more_than_1 = true;
+		//交换坐标轴
+		std::swap(x0, y0);
+		std::swap(x1, y1);
+	}
+	//x0 > x1 交换左右点
+	if (x0 > x1) {
+		std::swap(x0, x1);
+		std::swap(y0, y1);
+	}
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+	int derror = std::abs(dy) * 2;
+	int error = 0;
+	int y = y0;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (t_more_than_1) {
+			image.set(y, x, color);
+		}
+		else
 		{
-			int x = xy_learp(y0, x0, 1 / t, y);
 			image.set(x, y, color);
 		}
-	}
-	else
-	{
-		int minx = std::min(x0, x1);
-		int maxx = std::max(x0, x1);
-		for (int x = minx; x <= maxx; x++)
+		error += derror;
+		if (error > dx)//如果累计步进长度到达一格
 		{
-			int y = xy_learp(x0, y0, t, x);
-			image.set(x, y, color);
+			y += y1 > y0 ? 1 : -1;//向上或者向下走一格
+			error -= dx * 2;//减去一个移动步长
 		}
 	}
 }
