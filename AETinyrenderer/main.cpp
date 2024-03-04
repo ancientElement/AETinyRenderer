@@ -1,6 +1,5 @@
 #include <iostream>
 #include "tgaimage.h"
-#include "main.h"
 #include "model.h"
 
 const TGAColor* white = new TGAColor(255, 255, 255, 255);
@@ -51,13 +50,8 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
 	}
 }
 
-int main(int argc, char** argv) {
-	TGAImage* image = new TGAImage(500, 500, TGAImage::RGB);
-
-	Model* model = new Model("african_head.obj");
-
-	int height = image->get_height();
-	int width = image->get_width();
+void loadm_model(Model* model, int width, int height, TGAImage* image)
+{
 
 	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
 	{
@@ -77,11 +71,15 @@ int main(int argc, char** argv) {
 			line(x0, y0, x1, y1, *image, *white);
 		}
 	}
+}
+
+
+int main(int argc, char** argv) {
+	TGAImage* image = new TGAImage(800, 800, TGAImage::RGB);
 
 	image->flip_vertically();
 	image->write_tga_file("output.tga");
 
-	delete model;
 	delete image;
 	delete white;
 	delete red;
