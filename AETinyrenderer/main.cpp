@@ -4,6 +4,8 @@
 
 const TGAColor* white = new TGAColor(255, 255, 255, 255);
 const TGAColor* red = new TGAColor(255, 0, 0, 255);
+const TGAColor* green = new TGAColor(0, 255, 0, 255);
+const TGAColor* blue = new TGAColor(0, 0, 255, 255);
 
 int lerp(int a, int b, float t) {
 	return a + (b - a) * t;
@@ -50,9 +52,12 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
 	}
 }
 
+void line(Vec2i v0, Vec2i v1, TGAImage& image, TGAColor color) {
+	line(v0.x, v0.y, v1.x, v1.y, image, color);
+}
+
 void loadm_model(Model* model, int width, int height, TGAImage* image)
 {
-
 	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
 	{
 		std::vector<int> face = model->face(i);//得到一个面
@@ -73,12 +78,50 @@ void loadm_model(Model* model, int width, int height, TGAImage* image)
 	}
 }
 
+void triangle(Vec2i v0, Vec2i v1, Vec2i v2, TGAImage& image, TGAColor color) {
+	//升序排列顶点
+	if (v0.y > v1.y) std::swap(v0, v1);
+	if (v0.y > v2.y) std::swap(v0, v2);
+	if (v1.y > v2.y) std::swap(v1, v2);
+	line(v0, v1, image, *green);
+	line(v1, v2, image, *green);
+	line(v2, v0, image, *red);
+	//分割成为两部分
+	float t_02 = (float(v2.x - v0.x) / (v2.y - v0.y));
+	int mid_x = xy_learp(v0.y, v0.x, t_02, v1.y);
+	Vec2i v_mid = Vec2i(mid_x, v1.y);
+	line(v_mid, v1, image, *green);
+	//开始扫线 下半部分
+	float t_01 = (float(v1.x - v0.x) / (v1.y - v0.y));
+	for (int y = v0.y; y <= v1.y; y++)
+	{
+		int left_x = xy_learp(v0.y, v0.x, t_01, y);
+		int right_x = xy_learp(v0.y, v0.x, t_02, y);
+		line(left_x, y, right_x, y, image, color);
+	}
+	//上部分
+	float t_21 = (float(v1.x - v2.x) / (v1.y - v2.y));
+	for (int y = v1.y; y <= v2.y; y++)
+	{
+		int left_x = xy_learp(v2.y, v2.x, t_02, y);
+		int right_x = xy_learp(v2.y, v2.x, t_21, y);
+		line(left_x, y, right_x, y, image, color);
+	}
+}
 
 int main(int argc, char** argv) {
-	TGAImage* image = new TGAImage(800, 800, TGAImage::RGB);
+
+	TGAImage* image = new TGAImage(200, 200, TGAImage::RGB);
+
+	Vec2i t0[3] = { Vec2i(10, 70),   Vec2i(50, 160),  Vec2i(70, 80) };
+	Vec2i t1[3] = { Vec2i(180, 50),  Vec2i(150, 1),   Vec2i(70, 180) };
+	Vec2i t2[3] = { Vec2i(180, 150), Vec2i(120, 160), Vec2i(130, 180) };
+	triangle(t0[0], t0[1], t0[2], *image, *red);
+	triangle(t2[0], t2[1], t2[2], *image, *green);
+	triangle(t1[0], t1[1], t1[2], *image, *blue);
 
 	image->flip_vertically();
-	image->write_tga_file("output.tga");
+	image->write_tga_file("output_class2_triangle_3.tga");
 
 	delete image;
 	delete white;

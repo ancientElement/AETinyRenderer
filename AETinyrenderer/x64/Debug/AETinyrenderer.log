@@ -1,9 +1,9 @@
 ﻿  main.cpp
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(9,11): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(13,12): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(66,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(67,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(69,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(11,11): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(15,12): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(70,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(71,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(73,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(74,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   AETinyrenderer.vcxproj -> F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Debug\AETinyrenderer.exe
