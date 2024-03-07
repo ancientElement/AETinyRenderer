@@ -152,6 +152,8 @@ void triangle_foreach(Vec2i* pts, TGAImage& image, TGAColor color) {
 
 //加载模型面
 void load_modele_triangle(Model* model, TGAImage* image) {
+	//灯光方向
+	Vec3f light_dir(0, 0, 1);
 
 	int height = image->get_height();
 	int width = image->get_width();
@@ -160,11 +162,23 @@ void load_modele_triangle(Model* model, TGAImage* image) {
 		std::vector<int> face = model->face(i);//得到一个面
 
 		Vec2i triangle[3];
-		triangle[0] = Vec2i(((model->vert(face[0])).x + 1) * width / 2, ((model->vert(face[0])).y + 1) * height / 2);
-		triangle[2] = Vec2i(((model->vert(face[2])).x + 1) * width / 2, ((model->vert(face[2])).y + 1) * height / 2);
-		triangle[1] = Vec2i(((model->vert(face[1])).x + 1) * width / 2, ((model->vert(face[1])).y + 1) * height / 2);
-		TGAColor color(std::rand() % 255, std::rand() % 255, std::rand() % 255, 255);
-		triangle_foreach(triangle, *image, color);
+		Vec3f world_pos[3];
+		for (int j = 0; j < 3; j++) {
+			Vec3f v = model->vert(face[j]);
+			triangle[j] = Vec2i(((model->vert(face[j])).x + 1) * width / 2, ((model->vert(face[j])).y + 1) * height / 2);
+			world_pos[j] = v;
+		}
+		//TGAColor color(std::rand() % 255, std::rand() % 255, std::rand() % 255, 255);
+
+		//得到法线方向
+		Vec3f normal = (world_pos[0] - world_pos[2]) ^ (world_pos[1] - world_pos[2]);
+		normal.normalize();
+		//与光的方向点成
+		float intensity = light_dir * normal;
+		if (intensity > 0) {//去除背部
+			TGAColor color(255 * intensity, 255 * intensity, 255 * intensity, 255 * intensity);
+			triangle_foreach(triangle, *image, color);
+		}
 	}
 }
 
@@ -177,7 +191,7 @@ int main(int argc, char** argv) {
 	load_modele_triangle(model, image);
 
 	image->flip_vertically();
-	image->write_tga_file("output_class2_triangle_model_5.tga");
+	image->write_tga_file("output_class2_triangle_model_6.tga");
 
 	delete image;
 	delete model;

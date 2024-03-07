@@ -60,7 +60,7 @@ F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(83,11): warning C4244:
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(84,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(86,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(87,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(163,107): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(168,108): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
           with
           [
               t=float
@@ -69,7 +69,7 @@ F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(163,107): warning C424
           [
               t=int
           ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(163,62): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(168,63): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
           with
           [
               t=float
@@ -78,40 +78,8 @@ F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(163,62): warning C4244
           [
               t=int
           ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,107): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,62): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(165,107): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(165,62): warning C4244: “参数”: 从“t”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-          and
-          [
-              t=int
-          ]
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(179,74): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(179,57): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(179,40): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(179,23): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
   AETinyrenderer.vcxproj -> F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Debug\AETinyrenderer.exe
