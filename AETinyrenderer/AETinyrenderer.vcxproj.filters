@@ -55,5 +55,8 @@
     <Image Include="output_class2_triangle_4.tga">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="output_class2_triangle_model_5.tga">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

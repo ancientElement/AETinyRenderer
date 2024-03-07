@@ -69,7 +69,7 @@ Vec3f barycentric(Vec2i* pts, Vec2i P) {
 }
 
 //加载模型线框
-void loadm_model(Model* model, int width, int height, TGAImage* image)
+void load_model_line(Model* model, int width, int height, TGAImage* image)
 {
 	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
 	{
@@ -90,6 +90,7 @@ void loadm_model(Model* model, int width, int height, TGAImage* image)
 		}
 	}
 }
+
 
 //扫线法
 void triangle_scanning(Vec2i v0, Vec2i v1, Vec2i v2, TGAImage& image, TGAColor color) {
@@ -149,25 +150,37 @@ void triangle_foreach(Vec2i* pts, TGAImage& image, TGAColor color) {
 	}
 }
 
+//加载模型面
+void load_modele_triangle(Model* model, TGAImage* image) {
+
+	int height = image->get_height();
+	int width = image->get_width();
+	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
+	{
+		std::vector<int> face = model->face(i);//得到一个面
+
+		Vec2i triangle[3];
+		triangle[0] = Vec2i(((model->vert(face[0])).x + 1) * width / 2, ((model->vert(face[0])).y + 1) * height / 2);
+		triangle[2] = Vec2i(((model->vert(face[2])).x + 1) * width / 2, ((model->vert(face[2])).y + 1) * height / 2);
+		triangle[1] = Vec2i(((model->vert(face[1])).x + 1) * width / 2, ((model->vert(face[1])).y + 1) * height / 2);
+		TGAColor color(std::rand() % 255, std::rand() % 255, std::rand() % 255, 255);
+		triangle_foreach(triangle, *image, color);
+	}
+}
+
+
 int main(int argc, char** argv) {
 
-	TGAImage* image = new TGAImage(200, 200, TGAImage::RGB);
+	TGAImage* image = new TGAImage(500, 500, TGAImage::RGB);
+	Model* model = new Model("african_head.obj");
 
-	Vec2i t0[3] = { Vec2i(10, 70),   Vec2i(50, 160),  Vec2i(70, 80) };
-	Vec2i t1[3] = { Vec2i(180, 50),  Vec2i(150, 1),   Vec2i(70, 180) };
-	Vec2i t2[3] = { Vec2i(180, 150), Vec2i(120, 160), Vec2i(130, 180) };
-	//triangle_scanning(t0[0], t0[1], t0[2], *image, *red);
-	//triangle_scanning(t2[0], t2[1], t2[2], *image, *green);
-	//triangle_scanning(t1[0], t1[1], t1[2], *image, *blue);
-
-	triangle_foreach(t0, *image, *blue);
-	triangle_foreach(t1, *image, *green);
-	triangle_foreach(t2, *image, *red);
+	load_modele_triangle(model, image);
 
 	image->flip_vertically();
-	image->write_tga_file("output_class2_triangle_4.tga");
+	image->write_tga_file("output_class2_triangle_model_5.tga");
 
 	delete image;
+	delete model;
 	delete white;
 	delete red;
 	return 0;

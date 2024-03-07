@@ -143,6 +143,7 @@
     <Image Include="output_class2_triangle_2.tga" />
     <Image Include="output_class2_triangle_3.tga" />
     <Image Include="output_class2_triangle_4.tga" />
+    <Image Include="output_class2_triangle_model_5.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
