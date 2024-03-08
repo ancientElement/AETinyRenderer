@@ -159,6 +159,7 @@ int main(int argc, char** argv) {
 
 	TGAImage* image = new TGAImage(500, 500, TGAImage::RGB);
 
+	//OK
 	Model* model = new Model("african_head.obj");
 	load_modele_triangle(model, image);
 
