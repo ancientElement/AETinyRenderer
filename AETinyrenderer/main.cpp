@@ -7,14 +7,17 @@ const TGAColor* red = new TGAColor(255, 0, 0, 255);
 const TGAColor* green = new TGAColor(0, 255, 0, 255);
 const TGAColor* blue = new TGAColor(0, 0, 255, 255);
 
+//线性插值
 int lerp(int a, int b, float t) {
 	return a + (b - a) * t;
 }
 
+//求解线性xy
 int xy_learp(int x0, int y0, float t, int x) {
 	return y0 + t * (x - x0);
 }
 
+//画线
 void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
 	bool t_more_than_1 = false;
 	//t大于1
@@ -52,83 +55,30 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
 	}
 }
 
+//画线
 void line(Vec2i v0, Vec2i v1, TGAImage& image, TGAColor color) {
 	line(v0.x, v0.y, v1.x, v1.y, image, color);
 }
 
-//返回 u v w
-Vec3f barycentric(Vec2i* pts, Vec2i P) {
-	Vec3f u =
-		Vec3f(pts[2].x - pts[0].x, pts[1].x - pts[0].x, pts[0].x - P.x) ^
-		Vec3f(pts[2].y - pts[0].y, pts[1].y - pts[0].y, pts[0].y - P.y);
-	/* `pts` and `P` has integer value as coordinates
-	   so `abs(u[2])` < 1 means `u[2]` is 0, that means
-	   triangle is degenerate, in this case return something with negative coordinates */
-	if (std::abs(u.z) < 1) return Vec3f(-1, 1, 1);
-	return Vec3f(1.f - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
+//返回 u v w alpha peta gama
+Vec3f barycentric(Vec3f v0, Vec3f v1, Vec3f v2, Vec3f P) {
+	Vec3f AB = v2 - v0;
+	Vec3f AC = v1 - v0;
+	Vec3f PA = v0 - P;
+	Vec3f uvw =
+		Vec3f(AB.x, AC.x, PA.x) ^
+		Vec3f(AB.y, AC.y, PA.y);
+	if (std::abs(uvw.z) < 1) return Vec3f(-1, 1, 1);
+	return Vec3f(1.f - (uvw.x + uvw.y) / uvw.z, uvw.y / uvw.z, uvw.x / uvw.z);
 }
 
-//加载模型线框
-void load_model_line(Model* model, int width, int height, TGAImage* image)
-{
-	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
-	{
-		std::vector<int> face = model->face(i);//得到一个面
-
-		for (int j = 0; j < 3; j++)//遍历面的顶点
-		{
-			Vec3f v0 = model->vert(face[j]);
-			Vec3f v1 = model->vert(face[(j + 1) % 3]);//后一个点
-
-			int x0 = (v0.x + 1.0) * width / 2.0;
-			int y0 = (v0.y + 1.0) * height / 2.0;
-
-			int x1 = (v1.x + 1.0) * width / 2.0;
-			int y1 = (v1.y + 1.0) * height / 2.0;
-
-			line(x0, y0, x1, y1, *image, *white);
-		}
-	}
-}
-
-
-//扫线法
-void triangle_scanning(Vec2i v0, Vec2i v1, Vec2i v2, TGAImage& image, TGAColor color) {
-	//升序排列顶点
-	if (v0.y > v1.y) std::swap(v0, v1);
-	if (v0.y > v2.y) std::swap(v0, v2);
-	if (v1.y > v2.y) std::swap(v1, v2);
-	/*line(v0, v1, image, *green);
-	line(v1, v2, image, *green);
-	line(v2, v0, image, *red);*/
-	//分割成为两部分
-	float t_02 = (float(v2.x - v0.x) / (v2.y - v0.y));
-	int mid_x = xy_learp(v0.y, v0.x, t_02, v1.y);
-	Vec2i v_mid = Vec2i(mid_x, v1.y);
-	//line(v_mid, v1, image, *green);
-	//开始扫线 下半部分
-	float t_01 = (float(v1.x - v0.x) / (v1.y - v0.y));
-	for (int y = v0.y; y <= v1.y; y++)
-	{
-		int left_x = xy_learp(v0.y, v0.x, t_01, y);
-		int right_x = xy_learp(v0.y, v0.x, t_02, y);
-		line(left_x, y, right_x, y, image, color);
-	}
-	//上部分
-	float t_21 = (float(v1.x - v2.x) / (v1.y - v2.y));
-	for (int y = v1.y; y <= v2.y; y++)
-	{
-		int left_x = xy_learp(v2.y, v2.x, t_02, y);
-		int right_x = xy_learp(v2.y, v2.x, t_21, y);
-		line(left_x, y, right_x, y, image, color);
-	}
-}
-
-//遍历法
-void triangle_foreach(Vec2i* pts, TGAImage& image, TGAColor color) {
+//遍历法 深度缓冲
+void triangle_foreach(Vec3f* pts, float* z_buffer, TGAImage& image, TGAColor color) {
 	//包围盒
-	Vec2i left_down(image.get_width() - 1, image.get_height() - 1);
-	Vec2i right_up(0, 0);
+	int width = image.get_width();
+	int height = image.get_height();
+	Vec2f left_down(width - 1, height - 1);
+	Vec2f right_up(0, 0);
 	for (int i = 0; i < 3; i++)
 	{
 		left_down.x = std::min(left_down.x, pts[i].x);
@@ -138,63 +88,85 @@ void triangle_foreach(Vec2i* pts, TGAImage& image, TGAColor color) {
 		right_up.y = std::max(right_up.y, pts[i].y);
 	}
 	//遍历包围盒
-	for (int x = left_down.x; x <= right_up.x; x++)
+	Vec3f point;
+	for (point.x = left_down.x; point.x <= right_up.x; point.x++)
 	{
-		for (int y = left_down.y; y <= right_up.y; y++)
+		for (point.y = left_down.y; point.y <= right_up.y; point.y++)
 		{
-			Vec2i point(x, y);
-			Vec3f uvw = barycentric(pts, point);
+			Vec3f uvw = barycentric(pts[0], pts[1], pts[2], point);
+
+
 			if (uvw.x < 0 || uvw.y < 0 || uvw.z < 0) continue;
-			image.set(x, y, color);
+
+			point.z = 0;
+
+			//用重心坐标计算当前像素的z值
+			point.z += pts[0].z * uvw.x;
+			point.z += pts[1].z * uvw.y;
+			point.z += pts[2].z * uvw.z;
+
+			int index = int(point.x + point.y * width);
+			//这里z轴是负反向 越大越近
+			if (z_buffer[index] < point.z) //当前z_buffer的深度值在后面更新设深度值 更新颜色
+			{
+				//std::cout << point.z << std::endl;
+				z_buffer[index] = point.z;
+				image.set(point.x, point.y, color);
+			}
 		}
 	}
+}
+
+//世界坐标到平面坐标
+Vec3f world2screen(Vec3f v, int width, int height) {
+	return Vec3f(int((v.x + 1.) * width / 2. + .5), int((v.y + 1.) * height / 2. + .5), v.z);
 }
 
 //加载模型面
 void load_modele_triangle(Model* model, TGAImage* image) {
-	//灯光方向
-	Vec3f light_dir(0, 0, 1);
-
 	int height = image->get_height();
 	int width = image->get_width();
+
+	//灯光方向
+	Vec3f light_dir(0, 0, 1);
+	float* z_buffer = new float[height * width];
+	//初始化z_buffer都为及小的值
+	for (int i = width * height; i--; z_buffer[i] = -std::numeric_limits<float>::max());
+
 	for (int i = 0; i < model->nfaces(); i++)//遍历三角形
 	{
 		std::vector<int> face = model->face(i);//得到一个面
-
-		Vec2i triangle[3];
+		Vec3f pts[3];
 		Vec3f world_pos[3];
 		for (int j = 0; j < 3; j++) {
 			Vec3f v = model->vert(face[j]);
-			triangle[j] = Vec2i(((model->vert(face[j])).x + 1) * width / 2, ((model->vert(face[j])).y + 1) * height / 2);
+			pts[j] = world2screen(v, width, height);
 			world_pos[j] = v;
 		}
-		//TGAColor color(std::rand() % 255, std::rand() % 255, std::rand() % 255, 255);
-
 		//得到法线方向
 		Vec3f normal = (world_pos[0] - world_pos[2]) ^ (world_pos[1] - world_pos[2]);
 		normal.normalize();
-		//与光的方向点成
+		//与光的方向点乘
 		float intensity = light_dir * normal;
 		if (intensity > 0) {//去除背部
 			TGAColor color(255 * intensity, 255 * intensity, 255 * intensity, 255 * intensity);
-			triangle_foreach(triangle, *image, color);
+			triangle_foreach(pts, z_buffer, *image, color);
 		}
 	}
 }
 
-
 int main(int argc, char** argv) {
 
 	TGAImage* image = new TGAImage(500, 500, TGAImage::RGB);
-	Model* model = new Model("african_head.obj");
 
+	Model* model = new Model("african_head.obj");
 	load_modele_triangle(model, image);
 
 	image->flip_vertically();
-	image->write_tga_file("output_class2_triangle_model_6.tga");
+	image->write_tga_file("output_class2_triangle_model_7.tga");
 
-	delete image;
 	delete model;
+	delete image;
 	delete white;
 	delete red;
 	return 0;
