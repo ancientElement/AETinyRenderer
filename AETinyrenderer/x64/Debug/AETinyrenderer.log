@@ -1,40 +1,20 @@
 ﻿  main.cpp
 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(12,11): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(17,12): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(80,36): warning C4244: “参数”: 从“int”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(80,24): warning C4244: “参数”: 从“int”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(114,29): warning C4244: “参数”: 从“t”转换到“int”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(114,20): warning C4244: “参数”: 从“t”转换到“int”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(122,53): warning C4244: “参数”: 从“int”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(122,18): warning C4244: “参数”: 从“int”转换到“t”，可能丢失数据
-          with
-          [
-              t=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(152,74): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(152,57): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(152,40): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(152,23): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-  LINK : 没有找到 F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Debug\AETinyrenderer.exe 或上一个增量链接没有生成它；正在执行完全链接
+F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\Half.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\BFloat16.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\GenericPacketMathFunctions.h(676,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(40,34): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(40,16): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(44,34): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(44,16): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(59,75): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(59,50): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(59,25): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(59,15): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(91,11): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(91,20): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(92,11): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(92,28): warning C4244: “参数”: 从“double”转换到“const float”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(103,9): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(104,9): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
   AETinyrenderer.vcxproj -> F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Debug\AETinyrenderer.exe

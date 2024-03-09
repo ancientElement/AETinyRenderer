@@ -32,9 +32,6 @@
     <ClInclude Include="model.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="geometry.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="output.tga">
@@ -62,6 +59,12 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="output_class2_triangle_model_7.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="output_class4.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="output_class4_1.tga">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
