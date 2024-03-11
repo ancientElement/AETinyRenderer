@@ -23,7 +23,7 @@ Matrix4f viewcamera(Vector3f camera_pos, Vector3f up)
     m <<
         _left[0], _left[1], _left[2], -camera_pos[0],
         _up[0], _up[1], _up[2], -camera_pos[1],
-        _forward[0], _forward[1], _forward[2], -camera_pos[2],
+        -_forward[0], -_forward[1], -_forward[2], -camera_pos[2],
         0, 0, 0, 1;
     return m;
 }
@@ -62,7 +62,7 @@ Vector3f barycentric(vector<Vector2f> pts, Vector2f p)
     return Vector3f(-1, 1, 1);
 }
 
-void triangle(vector<Vector4f> pts, TGAImage& image, vector<vector<float>>& z_buffer, const TGAColor& color)
+void triangle(vector<Vector4f> pts, TGAImage& image, Shader* shader, vector<vector<float>>& z_buffer)
 {
     //包围盒
     Vector2i left_down(numeric_limits<int>::max(), numeric_limits<int>::max());
@@ -82,10 +82,10 @@ void triangle(vector<Vector4f> pts, TGAImage& image, vector<vector<float>>& z_bu
     int y = 0;
     for (x = left_down[0]; x <= right_up[0]; x++)
     {
-        if(x < 0) continue;
+        if (x < 0) continue;
         for (y = left_down[1]; y <= right_up[1]; y++)
         {
-            if(y < 0) continue;
+            if (y < 0) continue;
             vector<Vector2f> temp_pts;
             temp_pts.push_back(Vector2f(pts[0][0], pts[0][1]));
             temp_pts.push_back(Vector2f(pts[1][0], pts[1][1]));
@@ -96,16 +96,17 @@ void triangle(vector<Vector4f> pts, TGAImage& image, vector<vector<float>>& z_bu
             Vector3f uvw = barycentric(temp_pts, Vector2f(x, y));
             if (uvw[0] < 0 || uvw[1] < 0 || uvw[2] < 0) continue;
             //计算z值
-            float cur_z = 0;
-            cur_z += pts[0][2] * uvw[0];
-            cur_z += pts[1][2] * uvw[1];
-            cur_z += pts[2][2] * uvw[2];
-            /*cout << cur_z << endl;*/
+            float cur_z = pts[0][2] * uvw[0] + pts[1][2] * uvw[1] + pts[2][2] * uvw[2];
             //深度测试
             if (cur_z > z_buffer[x][y])
             {
-                z_buffer[x][y] = cur_z;
-                image.set(x, y, color);
+                TGAColor color;
+                bool discard = shader->fragment(uvw, color);
+                if (!discard)
+                {
+                    z_buffer[x][y] = cur_z;
+                    image.set(x, y, color);
+                }
             }
         }
     }

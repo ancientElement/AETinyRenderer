@@ -16,10 +16,17 @@ Model* model = NULL;
 int height = 500;
 int width = 500;
 //灯光方向
-Vector3f light_dir(0, 0, -10.);
+Vector3f light_dir(0, 0, -1.);
 //摄像机
 Vector3f camera_up(0, 1., 0);
-Vector3f camera_pos(0, 0, 1.);
+Vector3f camera_pos(-.8, .2, 1.5);
+//几个矩阵
+//视口矩阵
+Matrix4f m_viewport;
+//透视投影
+Matrix4f m_projection;
+//viewcamer
+Matrix4f m_viewcamera;
 
 void debug(Vector4f v)
 {
@@ -37,12 +44,23 @@ void debug(Vector4f v)
 class GroundShader : public Shader
 {
 public:
+    Vector3f ndl; //法线与光方向
     virtual Eigen::Vector4f vertex(int iface, int ivertex) override
     {
+        Vector3f v = model->vert(iface, ivertex);
+        Vector3f n = model->normal(iface, ivertex).normalized();
+        // ndl = model->normal(iface, ivertex).normalized();
+        // ndl[ivertex] = max(0.f,n.dot(light_dir));
+        ndl[ivertex] = n.dot(light_dir);
+        // cout << ndl[ivertex];
+        return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
     }
 
     virtual bool fragment(Vector3f barycentric, TGAColor& color) override
     {
+        float intencity = ndl.dot(barycentric);
+        color = TGAColor(255 * intencity, 255 * intencity, 255 * intencity);
+        return false;
     }
 };
 
@@ -50,57 +68,64 @@ int main(int argc, char** argv)
 {
     cout << "main" << endl;
     TGAImage* image = new TGAImage(width, height, TGAImage::RGB);
-    // Model* model = new Model("Resources/box.obj");
-    model = new Model("Resources/monkey.obj");
+    model = new Model("Resources/african_head.obj");
+    // model = new Model("Resources/african_head.obj");
     vector<vector<float>> z_buffer(width, vector<float>(height, -numeric_limits<float>::max()));
     //灯光
     light_dir.normalize();
-    //视口矩阵
-    Matrix4f m_viewport = viewpotr(width, height);
-    //透视投影
-    Matrix4f m_projection = projection(camera_pos[2]);
-    //viewcamer
-    Matrix4f m_viewcamera = viewcamera(camera_pos, camera_up);
     //屏幕坐标
-    vector<Vector3f> world_pos(3);
-    //世界坐标
     vector<Vector4f> screen_croods(3);
+    //世界坐标
+    // vector<Vector3f> world_pos(3);
+    //矩阵
+    m_viewport = viewpotr(width, height);
+    m_projection = projection(camera_pos[2]);
+    m_viewcamera = viewcamera(camera_pos, camera_up);
+    //shader
+    GroundShader* shader = new GroundShader();
+
     cout << "total face:";
     cout << model->nfaces() << endl;
+
     //遍历三角形
     for (int i = 0; i < model->nfaces(); i++)
     {
-        //得到一个面
+        //得到一个面 三个点对应的一个面
         vector<int> face = model->face(i);
         cout << "now is ";
         cout << i;
         cout << "face" << endl;
         //遍历顶点
+        //--顶点阶段--
         for (int j = 0; j < 3; j++)
         {
-            world_pos[j] = model->vert(face[j]);
-            screen_croods[j] =
-                m_viewport *
-                m_projection *
-                m_viewcamera *
-                Vector4f(world_pos[j][0], world_pos[j][1], world_pos[j][2], 1);
+            // world_pos[j] = model->vert(face[j]);
+            // screen_croods[j] =
+            //     m_viewport *
+            //     m_projection *
+            //     m_viewcamera *
+            //     Vector4f(world_pos[j][0], world_pos[j][1], world_pos[j][2], 1);
+            screen_croods[j] = shader->vertex(i, j);
             // screen_croods[j] = m_viewport * Vector4f(v[0], v[1], v[2], 1);
         }
         //法线
-        Vector3f normal;
-        normal = (world_pos[1] - world_pos[2]).cross(world_pos[0] - world_pos[2]);
-        normal.normalize();
-        float itensity = normal.dot(light_dir);
+        // Vector3f normal;
+        // normal = (world_pos[1] - world_pos[2]).cross(world_pos[0] - world_pos[2]);
+        // normal.normalize();
+        // float itensity = normal.dot(light_dir);
         // cout << itensity << endl;
-        if (itensity > 0)
-        {
-            // cout << "生成了三角形" + i << endl;
-            triangle(screen_croods, *image, z_buffer, TGAColor(itensity * 255, itensity * 255, itensity * 255, 255));
-        }
+        //--片元阶段--
+        //背面剔除
+        // if (itensity > 0)
+        // {
+        // cout << "生成了三角形" + i << endl;
+        triangle(screen_croods, *image, shader, z_buffer);
+        // }
     }
 
     image->flip_vertically();
-    image->write_tga_file("Resources/output_class4_triangle_model_monkey_head_viewcamera.tga");
+    image->write_tga_file("Resources/output_class4_triangle_model_african_head_viewcamera.tga");
+    delete shader;
     delete model;
     delete image;
     return 0;
@@ -139,3 +164,26 @@ int main(int argc, char** argv)
 //现在是16:18 学习了回溯算法写了一道动态规划题目
 //现在是16:20 计划让相机永远看向中心,我们只需要输入up轴就可以了
 //现在是16:38 viewcamera矩阵没有什么大问题
+//现在是17:26 写了一部分Shader类,用model->vert(iface, ivertex);时会报错:
+// texture file Resources/monkey_diffuse.tgacan't open file Resources/monkey_diffuse.tga
+//  loading failed
+// texture file Resources/monkey_nm.tgacan't open file Resources/monkey_nm.tga
+//  loading failed
+// texture file Resources/monkey_spec.tgacan't open file Resources/monkey_spec.tga
+//  loading failed
+//现在是17:32 下载了其他贴图
+//现在是18:18 吃完了饭,输出african_head图像是全黑色
+//现在是18:21 没问题是m_viewport错误用viewcamera初始化了
+//现在是18:23 viewcamer有问题他将z_buffer搞没有了,总的来说是z轴被他动了
+//现在是18:23 上一个问题是没有将forword写成负的
+//现在是18:48 没什么头绪,报错
+//Exception 0xc0000005 encountered at address 0x7ff6751c2146: Access violation reading location 0x00000018
+//具体是
+// Vec3f Model::vert(int iface, int nthvert) {
+//     return verts_[faces_[iface][nthvert][0]];
+// }
+//里面报错可能是verts没有初始化
+//可以取那个知乎博主的github上看看他是怎么更改的
+//现在是20:57 有点厌倦GamePlay开发了,搞了快两个小时也没搞出个所以然来,不如做图形学,还有的地方学
+//现在是21:13 妈的原来是全局变量model没赋值上
+//现在是22:07  有法线贴图的颜色了但是用max之后就不对劲了// ndl[ivertex] = max(0.f,n.dot(light_dir)); 
