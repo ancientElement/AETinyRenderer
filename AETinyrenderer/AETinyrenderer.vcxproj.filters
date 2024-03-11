@@ -15,63 +15,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tgaimage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <Image Include="Resources\output.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_0.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_1.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_2.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_3.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_4.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_model_5.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_model_6.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class2_triangle_model_7.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class4.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class4_1.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class4_triangle_model_1.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\output_class4_triangle_model.tga">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="model.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tgaimage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="gl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tgaimage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="model.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="output.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_0.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_1.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_2.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_3.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_4.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_model_5.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_model_6.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class2_triangle_model_7.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class4.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class4_1.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class4_triangle_model.tga">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="output_class4_triangle_model_1.tga">
-      <Filter>资源文件</Filter>
-    </Image>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tgaimage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="gl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

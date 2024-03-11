@@ -3,40 +3,15 @@ F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(1,1): warning C4819: �
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\Half.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\BFloat16.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\GenericPacketMathFunctions.h(676,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(66,32): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(66,22): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(75,52): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(75,21): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,68): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,53): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,38): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,23): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,67): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,52): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,37): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,22): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\PlainObjectBase.h(807,7): error C2338: static_assert failed: 'FLOATING_POINT_ARGUMENT_PASSED__INTEGER_WAS_EXPECTED'
-F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\Matrix.h(340,32): message : 查看对正在编译的函数 模板 实例化“void Eigen::PlainObjectBase<Eigen::Matrix<float,3,1,0,3,1>>::_init2<T0,T1>(Eigen::Index,Eigen::Index,float *)”的引用
-          with
-          [
-              T0=float,
-              T1=float
-          ]
-F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\Matrix.h(340,35): message : 查看对正在编译的函数 模板 实例化“void Eigen::PlainObjectBase<Eigen::Matrix<float,3,1,0,3,1>>::_init2<T0,T1>(Eigen::Index,Eigen::Index,float *)”的引用
-          with
-          [
-              T0=float,
-              T1=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(140,21): message : 查看对正在编译的函数 模板 实例化“Eigen::Matrix<float,3,1,0,3,1>::Matrix<float,float>(const T0 &,const T1 &)”的引用
-          with
-          [
-              T0=float,
-              T1=float
-          ]
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(140,11): message : 查看对正在编译的函数 模板 实例化“Eigen::Matrix<float,3,1,0,3,1>::Matrix<float,float>(const T0 &,const T1 &)”的引用
-          with
-          [
-              T0=float,
-              T1=float
-          ]
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(60,96): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(60,80): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(60,64): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(62,94): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(62,80): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(62,64): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+  正在生成代码
+  3 of 1050 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  AETinyrenderer.vcxproj -> F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Release\AETinyrenderer.exe

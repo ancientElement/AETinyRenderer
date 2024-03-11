@@ -3,16 +3,4 @@ F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(1,1): warning C4819: �
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\Half.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\BFloat16.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
 F:\WorkPlace\Github\eigen-3.4.0\Eigen\src\Core\arch\Default\GenericPacketMathFunctions.h(676,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(66,32): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(66,22): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(75,52): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(75,21): warning C4244: “参数”: 从“int”转换到“const float”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,68): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,53): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,38): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(126,23): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,67): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,52): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,37): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\main.cpp(164,22): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
   AETinyrenderer.vcxproj -> F:\WorkPlace\Study\AETinyrenderer\AETinyrenderer\x64\Debug\AETinyrenderer.exe
