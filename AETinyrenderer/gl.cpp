@@ -14,16 +14,16 @@ void debug(Vector2f v)
     cout << endl;
 }
 
-Matrix4f lookat(Vector3f camera_pos, Vector3f right, Vector3f up)
+Matrix4f viewcamera(Vector3f camera_pos, Vector3f forward, Vector3f up)
 {
-    Vector3f t = up.normalized();
-    Vector3f g = right.normalized();
-    Vector3f gxt = g.cross(t).normalized();
+    Vector3f _up = up.normalized();
+    Vector3f _forward = forward.normalized();
+    Vector3f _left = _up.cross(_forward).normalized();
     Matrix4f m;
     m <<
-        gxt[0], gxt[1], gxt[2], -camera_pos[0],
-        t[0], t[1], t[2], -camera_pos[1],
-        g[0], g[1], g[2], -camera_pos[2],
+        _left[0], _left[1], _left[2], -camera_pos[0],
+        _up[0], _up[1], _up[2], -camera_pos[1],
+        _forward[0], _forward[1], _forward[2], -camera_pos[2],
         0, 0, 0, 1;
     return m;
 }
@@ -62,19 +62,19 @@ Vector3f barycentric(vector<Vector2f> pts, Vector2f p)
     return Vector3f(-1, 1, 1);
 }
 
-void triangle(vector<Vector4f>& pts, TGAImage& image, vector<vector<float>>& z_buffer, const TGAColor& color)
+void triangle(vector<Vector4f> pts, TGAImage& image, vector<vector<float>>& z_buffer, const TGAColor& color)
 {
     //包围盒
     Vector2i left_down(numeric_limits<int>::max(), numeric_limits<int>::max());
     Vector2i right_up(-numeric_limits<int>::max(), -numeric_limits<int>::max());
     for (int i = 0; i < 3; ++i)
     {
-        left_down[0] = min<int>(left_down[0], (int)pts[i][0] / pts[i][3]);
-        left_down[1] = min<int>(left_down[1], (int)pts[i][1] / pts[i][3]);
-
-        right_up[0] = max<int>(right_up[0], (int)pts[i][0] / pts[i][3]);
-        right_up[1] = max<int>(right_up[1], (int)pts[i][1] / pts[i][3]);
         pts[i] = pts[i] / pts[i][3];
+        left_down[0] = min(left_down[0], (int)(pts[i][0] + .5));
+        left_down[1] = min(left_down[1], (int)(pts[i][1] + .5));
+
+        right_up[0] = max(right_up[0], (int)(pts[i][0] + .5));
+        right_up[1] = max(right_up[1], (int)(pts[i][1] + .5));
     }
     //遍历包围盒
     //逐像素
