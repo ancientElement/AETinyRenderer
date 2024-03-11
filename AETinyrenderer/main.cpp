@@ -19,7 +19,7 @@ int width = 500;
 Vector3f light_dir(0, 0, -1.);
 //摄像机
 Vector3f camera_up(0, 1., 0);
-Vector3f camera_pos(-.8, .2, 1.5);
+Vector3f camera_pos(-.5, 0, 1.);
 //几个矩阵
 //视口矩阵
 Matrix4f m_viewport;
@@ -76,7 +76,7 @@ int main(int argc, char** argv)
     //屏幕坐标
     vector<Vector4f> screen_croods(3);
     //世界坐标
-    // vector<Vector3f> world_pos(3);
+    vector<Vector3f> world_pos(3);
     //矩阵
     m_viewport = viewpotr(width, height);
     m_projection = projection(camera_pos[2]);
@@ -95,32 +95,13 @@ int main(int argc, char** argv)
         cout << "now is ";
         cout << i;
         cout << "face" << endl;
-        //遍历顶点
         //--顶点阶段--
         for (int j = 0; j < 3; j++)
         {
-            // world_pos[j] = model->vert(face[j]);
-            // screen_croods[j] =
-            //     m_viewport *
-            //     m_projection *
-            //     m_viewcamera *
-            //     Vector4f(world_pos[j][0], world_pos[j][1], world_pos[j][2], 1);
             screen_croods[j] = shader->vertex(i, j);
-            // screen_croods[j] = m_viewport * Vector4f(v[0], v[1], v[2], 1);
         }
-        //法线
-        // Vector3f normal;
-        // normal = (world_pos[1] - world_pos[2]).cross(world_pos[0] - world_pos[2]);
-        // normal.normalize();
-        // float itensity = normal.dot(light_dir);
-        // cout << itensity << endl;
         //--片元阶段--
-        //背面剔除
-        // if (itensity > 0)
-        // {
-        // cout << "生成了三角形" + i << endl;
         triangle(screen_croods, *image, shader, z_buffer);
-        // }
     }
 
     image->flip_vertically();
@@ -187,3 +168,4 @@ int main(int argc, char** argv)
 //现在是20:57 有点厌倦GamePlay开发了,搞了快两个小时也没搞出个所以然来,不如做图形学,还有的地方学
 //现在是21:13 妈的原来是全局变量model没赋值上
 //现在是22:07  有法线贴图的颜色了但是用max之后就不对劲了// ndl[ivertex] = max(0.f,n.dot(light_dir)); 
+//现在是22:26  不清楚问题所在,还有移动相机幅度太大会出现问题
