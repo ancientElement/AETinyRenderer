@@ -14,10 +14,10 @@ void debug(Vector2f v)
     cout << endl;
 }
 
-Matrix4f viewcamera(Vector3f camera_pos, Vector3f forward, Vector3f up)
+Matrix4f viewcamera(Vector3f camera_pos, Vector3f up)
 {
     Vector3f _up = up.normalized();
-    Vector3f _forward = forward.normalized();
+    Vector3f _forward = (Vector3f::Zero() - camera_pos).normalized();
     Vector3f _left = _up.cross(_forward).normalized();
     Matrix4f m;
     m <<
@@ -82,8 +82,10 @@ void triangle(vector<Vector4f> pts, TGAImage& image, vector<vector<float>>& z_bu
     int y = 0;
     for (x = left_down[0]; x <= right_up[0]; x++)
     {
+        if(x < 0) continue;
         for (y = left_down[1]; y <= right_up[1]; y++)
         {
+            if(y < 0) continue;
             vector<Vector2f> temp_pts;
             temp_pts.push_back(Vector2f(pts[0][0], pts[0][1]));
             temp_pts.push_back(Vector2f(pts[1][0], pts[1][1]));

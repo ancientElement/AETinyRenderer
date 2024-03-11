@@ -2,7 +2,6 @@
 #include <Eigen/Dense>
 #include "tgaimage.h"
 #include "model.h"
-#include "Shader.h"
 #include "gl.h"
 using namespace Eigen;
 using namespace std;
@@ -11,16 +10,16 @@ const TGAColor white(255, 255, 255, 255);
 const TGAColor red(255, 0, 0, 255);
 const TGAColor greenTGAColor(0, 255, 0, 255);
 const TGAColor blue(0, 0, 255, 255);
-
+//模型
+Model* model = NULL;
 //图片宽高
 int height = 500;
 int width = 500;
 //灯光方向
 Vector3f light_dir(0, 0, -10.);
 //摄像机
-Vector3f camera_forword(0, 0, -1.);
 Vector3f camera_up(0, 1., 0);
-Vector3f camera_pos(0, 10., 0);
+Vector3f camera_pos(0, 0, 1.);
 
 void debug(Vector4f v)
 {
@@ -34,12 +33,25 @@ void debug(Vector4f v)
     cout << endl;
 }
 
+//着色器
+class GroundShader : public Shader
+{
+public:
+    virtual Eigen::Vector4f vertex(int iface, int ivertex) override
+    {
+    }
+
+    virtual bool fragment(Vector3f barycentric, TGAColor& color) override
+    {
+    }
+};
+
 int main(int argc, char** argv)
 {
     cout << "main" << endl;
     TGAImage* image = new TGAImage(width, height, TGAImage::RGB);
     // Model* model = new Model("Resources/box.obj");
-    Model* model = new Model("Resources/monkey.obj");
+    model = new Model("Resources/monkey.obj");
     vector<vector<float>> z_buffer(width, vector<float>(height, -numeric_limits<float>::max()));
     //灯光
     light_dir.normalize();
@@ -48,7 +60,7 @@ int main(int argc, char** argv)
     //透视投影
     Matrix4f m_projection = projection(camera_pos[2]);
     //viewcamer
-    Matrix4f m_viewcamera = viewcamera(camera_pos, camera_forword, camera_up);
+    Matrix4f m_viewcamera = viewcamera(camera_pos, camera_up);
     //屏幕坐标
     vector<Vector3f> world_pos(3);
     //世界坐标
@@ -123,4 +135,7 @@ int main(int argc, char** argv)
 //现在是12:48 接下来解决裂缝问题
 //现在是13:06 裂缝在包围盒子生成时要用四舍五入,成功解决
 //现在是13:06 开始viewcamer矩阵
-//现在是13:33 透视矩阵正确 当需改进方向
+//现在是13:33 透视矩阵正确 但是需改进方向
+//现在是16:18 学习了回溯算法写了一道动态规划题目
+//现在是16:20 计划让相机永远看向中心,我们只需要输入up轴就可以了
+//现在是16:38 viewcamera矩阵没有什么大问题
