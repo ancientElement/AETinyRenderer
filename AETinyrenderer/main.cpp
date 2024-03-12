@@ -19,7 +19,7 @@ int width = 500;
 Vector3f light_dir(1., 1., 1.);
 //摄像机
 Vector3f camera_up(0, 1., 0);
-Vector3f camera_pos(.8, .2, 3.);
+Vector3f camera_pos(.3, .2, 3.);
 //几个矩阵
 //视口矩阵
 Matrix4f m_viewport;
@@ -45,23 +45,12 @@ class GroundShader : public Shader
 {
 public:
     Vector3f ndl; //法线与光方向
-    vector<Vector3f> world_pos;
-
-    GroundShader()
-    {
-        world_pos = vector<Vector3f>(3);
-    }
-
     virtual Eigen::Vector4f vertex(int iface, int ivertex) override
     {
         Vector3f v = model->vert(iface, ivertex);
         Vector3f n = model->normal(iface, ivertex).normalized();
         ndl[ivertex] = max(.0f, n.dot(light_dir));
         return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
-
-        // Vector3f v = model->vert(iface, ivertex);
-        // world_pos[ivertex] = v;
-        // return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
     }
 
     virtual bool fragment(Vector3f barycentric, TGAColor& color) override
@@ -75,16 +64,34 @@ public:
         else intensity = 0;
         color = TGAColor(255, 155, 0) * intensity;
         return false;
+    }
+};
 
-        // float intencity = ndl.dot(barycentric);
-        // color = TGAColor(255 * intencity, 255 * intencity, 255 * intencity);
-        // return false;
+class SimpleShader : public Shader
+{
+public:
+    Vector3f ndl; //法线与光方向
+    Matrix<float, 2, 3> uv; //uv
+    virtual Eigen::Vector4f vertex(int iface, int ivertex) override
+    {
+        //顶点
+        Vector3f v = model->vert(iface, ivertex);
+        //法线
+        Vector3f n = model->normal(iface, ivertex).normalized();
+        ndl[ivertex] = max(.0f, n.dot(light_dir));
+        //纹理
+        uv(0, ivertex) = model->uv(iface, ivertex)[0];
+        uv(1, ivertex) = model->uv(iface, ivertex)[1];
+        return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
+    }
 
-        // Vector3f normal = (world_pos[1] - world_pos[2]).cross(world_pos[0] - world_pos[2]);
-        // normal.normalize();
-        // float intencity = normal.dot(light_dir);
-        // color = TGAColor(255 * intencity, 255 * intencity, 255 * intencity);
-        // return false;
+    virtual bool fragment(Vector3f barycentric, TGAColor& color) override
+    {
+        float intensity = ndl.dot(barycentric);
+        Vector2f tempUV = uv * barycentric;
+        color = model->diffuse(tempUV);
+        color = color * intensity;
+        return false;
     }
 };
 
@@ -106,7 +113,8 @@ int main(int argc, char** argv)
     m_projection = projection(camera_pos[2]);
     m_viewcamera = viewcamera(camera_pos, camera_up);
     //shader
-    GroundShader* shader = new GroundShader();
+    // GroundShader* shader = new GroundShader();
+    SimpleShader* shader = new SimpleShader();
 
     cout << "total face:";
     cout << model->nfaces() << endl;
@@ -115,10 +123,10 @@ int main(int argc, char** argv)
     for (int i = 0; i < model->nfaces(); i++)
     {
         //得到一个面 三个点对应的一个面
-        vector<int> face = model->face(i);
-        cout << "now is ";
-        cout << i;
-        cout << "face" << endl;
+        // vector<int> face = model->face(i);
+        // cout << "now is ";
+        // cout << i;
+        // cout << "face" << endl;
         //--顶点阶段--
         for (int j = 0; j < 3; j++)
         {
@@ -129,7 +137,7 @@ int main(int argc, char** argv)
     }
 
     image->flip_vertically();
-    image->write_tga_file("Resources/output_class6_triangle_model_african_head_shader.tga");
+    image->write_tga_file("Resources/output_class6_triangle_model_african_head_shader_2_diffuse.tga");
     delete shader;
     delete model;
     delete image;
