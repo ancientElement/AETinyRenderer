@@ -24,5 +24,5 @@ public:
 Matrix4f viewcamera(Vector3f camera_pos, Vector3f up);
 Matrix4f viewpotr(int width, int height);
 Matrix4f projection(float camera_z);
-Vector3f barycentric(vector<Vector2i> pts, Vector2i p);
+Vector3f barycentric(vector<Vector3f> pts, Vector3f p);
 void triangle(vector<Vector4f> pts, TGAImage& image, Shader* shader, vector<vector<float>>& z_buffer);
