@@ -16,7 +16,7 @@ Model* model = NULL;
 int height = 500;
 int width = 500;
 //灯光方向
-Vector3f light_dir(1., 1., 1.);
+Vector3f light_dir(-.2, .3, 1.);
 //摄像机
 Vector3f camera_up(0, 1., 0);
 Vector3f camera_pos(.3, .2, 3.);
@@ -78,6 +78,7 @@ public:
         Vector3f v = model->vert(iface, ivertex);
         //法线
         Vector3f n = model->normal(iface, ivertex).normalized();
+        //光方向与法线方向的点乘
         ndl[ivertex] = max(.0f, n.dot(light_dir));
         //纹理
         uv(0, ivertex) = model->uv(iface, ivertex)[0];
@@ -88,12 +89,99 @@ public:
     virtual bool fragment(Vector3f barycentric, TGAColor& color) override
     {
         float intensity = ndl.dot(barycentric);
-        Vector2f tempUV = uv * barycentric;
-        color = model->diffuse(tempUV);
+        Vector2f temp_uv = uv * barycentric;
+        color = model->diffuse(temp_uv);
         color = color * intensity;
         return false;
     }
 };
+
+class SimpleShaderNormal : public Shader
+{
+public:
+    Matrix4f MT; //projection矩阵 * viewcamera矩阵的转置
+    Matrix4f M; //projection矩阵 * viewcamera矩阵
+    Matrix<float, 2, 3> uv; //uv
+    SimpleShaderNormal(Matrix4f m, Matrix4f mt) : MT(mt), M(m)
+    {
+    }
+
+    virtual Eigen::Vector4f vertex(int iface, int ivertex) override
+    {
+        //顶点
+        Vector3f v = model->vert(iface, ivertex);
+        //纹理
+        uv(0, ivertex) = model->uv(iface, ivertex)[0];
+        uv(1, ivertex) = model->uv(iface, ivertex)[1];
+        return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
+    }
+
+    virtual bool fragment(Vector3f barycentric, TGAColor& color) override
+    {
+        //uv
+        Vector2f temp_uv = uv * barycentric;
+        //法线 
+        Vector3f n = model->normal(temp_uv);
+        Vector4f n_temp = Vector4f(n[0], n[1], n[2], 0);
+        n_temp = MT * n_temp;
+        n = Vector3f(n[0], n[1], n[2]);
+        //光 转化到屏幕空间中
+        Vector4f l_temp = M * Vector4f(light_dir[0], light_dir[1], light_dir[2], 0);
+        Vector3f l = Vector3f(l_temp[0], l_temp[1], l_temp[2]);
+        //求光与法线夹脚
+        float intensity = max(0.f, n.dot(l));
+        color = model->diffuse(temp_uv) * intensity;
+        return false;
+    }
+};
+
+class SimpleShaderSpecular : public Shader
+{
+public:
+    Matrix4f MT; //projection矩阵 * viewcamera矩阵的转置
+    Matrix4f M; //projection矩阵 * viewcamera矩阵
+    Matrix<float, 2, 3> uv; //uv
+    SimpleShaderSpecular(Matrix4f m, Matrix4f mt) : MT(mt), M(m)
+    {
+    }
+
+    virtual Eigen::Vector4f vertex(int iface, int ivertex) override
+    {
+        //顶点
+        Vector3f v = model->vert(iface, ivertex);
+        //纹理
+        uv(0, ivertex) = model->uv(iface, ivertex)[0];
+        uv(1, ivertex) = model->uv(iface, ivertex)[1];
+        return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
+    }
+
+    virtual bool fragment(Vector3f barycentric, TGAColor& color) override
+    {
+        //uv
+        Vector2f temp_uv = uv * barycentric;
+        //法线 
+        Vector3f n = model->normal(temp_uv);
+        Vector4f n_temp = Vector4f(n[0], n[1], n[2], 0);
+        n_temp = MT * n_temp;
+        n = Vector3f(n[0], n[1], n[2]).normalized();
+        //光 转化到屏幕空间中
+        Vector4f l_temp = M * Vector4f(light_dir[0], light_dir[1], light_dir[2], 0);
+        Vector3f l = Vector3f(l_temp[0], l_temp[1], l_temp[2]).normalized();
+        //求光与法线夹角 漫反射
+        float diffuse = max(0.f, n.dot(l));
+        color = model->diffuse(temp_uv) * diffuse;
+        //光的反射方向
+        Vec3f r = (l + 2.f * n * (n.dot(l))).normalized();
+        //高光 z的大小就是他与normal的夹角大小成正比
+        float specular = r[2];
+        //颜色
+        TGAColor c = model->diffuse(temp_uv);
+        color = c;
+        for (int i = 0; i < 3; i++) color[i] = std::min<float>(5 + c[i] * (diffuse + .6 * specular), 255);
+        return false;
+    }
+};
+
 
 int main(int argc, char** argv)
 {
@@ -114,7 +202,13 @@ int main(int argc, char** argv)
     m_viewcamera = viewcamera(camera_pos, camera_up);
     //shader
     // GroundShader* shader = new GroundShader();
-    SimpleShader* shader = new SimpleShader();
+    // SimpleShader* shader = new SimpleShader();
+
+    // SimpleShaderNormal* shader = new
+    //     SimpleShaderNormal(m_projection * m_viewport, (m_projection * m_viewport).transpose());
+
+    SimpleShaderSpecular* shader = new
+        SimpleShaderSpecular(m_projection * m_viewport, (m_projection * m_viewport).transpose());
 
     cout << "total face:";
     cout << model->nfaces() << endl;
@@ -137,7 +231,7 @@ int main(int argc, char** argv)
     }
 
     image->flip_vertically();
-    image->write_tga_file("Resources/output_class6_triangle_model_african_head_shader_2_diffuse.tga");
+    image->write_tga_file("Resources/output_class6_triangle_model_african_head_shader_4_specular.tga");
     delete shader;
     delete model;
     delete image;
