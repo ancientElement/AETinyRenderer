@@ -16,10 +16,10 @@ Model* model = NULL;
 int height = 500;
 int width = 500;
 //灯光方向
-Vector3f light_dir(-.2, .3, 1.);
+Vector3f light_dir(0, 0, 1.);
 //摄像机
 Vector3f camera_up(0, 1., 0);
-Vector3f camera_pos(.3, .2, 3.);
+Vector3f camera_pos(.3, .4, 1.5);
 //几个矩阵
 //视口矩阵
 Matrix4f m_viewport;
@@ -182,6 +182,45 @@ public:
     }
 };
 
+class TangentNormalShader : public Shader
+{
+public:
+    Matrix4f MT; //projection矩阵 * viewcamera矩阵的转置
+    Matrix4f M; //projection矩阵 * viewcamera矩阵
+    Matrix<float, 2, 3> uv; //uv
+    Matrix3f normal; //法线和光的点积
+    TangentNormalShader(Matrix4f m, Matrix4f mt) : MT(mt), M(m)
+    {
+    }
+
+    virtual Eigen::Vector4f vertex(int iface, int ivertex) override
+    {
+        //顶点
+        Vector3f v = model->vert(iface, ivertex);
+        //纹理
+        uv(0, ivertex) = model->uv(iface, ivertex)[0];
+        uv(1, ivertex) = model->uv(iface, ivertex)[1];
+        //点积
+        Vector3f temp_normal = model->normal(iface, ivertex);
+        Vector4f temp_normal_1 = MT * Vector4f(temp_normal[0], temp_normal[1], temp_normal[2], 0.);
+        normal(0, ivertex) = temp_normal_1[0];
+        normal(1, ivertex) = temp_normal_1[1];
+        normal(2, ivertex) = temp_normal_1[2];
+        return m_viewport * m_projection * m_viewcamera * Vector4f(v[0], v[1], v[2], 1.);
+    }
+
+    virtual bool fragment(Vector3f barycentric, TGAColor& color) override
+    {
+        //uv
+        Vector2f temp_uv = uv * barycentric;
+        //法线 
+        Vector3f n = normal * barycentric;
+        //求光与法线夹脚
+        float diff = std::max(0.f, n.dot(light_dir));
+        color = model->diffuse(temp_uv) * diff;
+        return false;
+    }
+};
 
 int main(int argc, char** argv)
 {
@@ -197,18 +236,20 @@ int main(int argc, char** argv)
     //世界坐标
     vector<Vector3f> world_pos(3);
     //矩阵
-    m_viewport = viewpotr(width, height);
+    m_viewport = viewpotr(-width*.15f, -width*.15f, width * 1.5f, height * 1.5f);
     m_projection = projection(camera_pos[2]);
     m_viewcamera = viewcamera(camera_pos, camera_up);
     //shader
     // GroundShader* shader = new GroundShader();
     // SimpleShader* shader = new SimpleShader();
 
-    // SimpleShaderNormal* shader = new
-    //     SimpleShaderNormal(m_projection * m_viewport, (m_projection * m_viewport).transpose());
+    SimpleShaderNormal* shader = new
+        SimpleShaderNormal(m_projection * m_viewport, (m_projection * m_viewport).transpose());
 
-    SimpleShaderSpecular* shader = new
-        SimpleShaderSpecular(m_projection * m_viewport, (m_projection * m_viewport).transpose());
+    // SimpleShaderSpecular* shader = new
+    // SimpleShaderSpecular(m_projection * m_viewport, (m_projection * m_viewport).transpose());
+    // TangentNormalShader* shader = new
+    //     TangentNormalShader(m_projection * m_viewport, (m_projection * m_viewport).transpose());
 
     cout << "total face:";
     cout << model->nfaces() << endl;
@@ -217,10 +258,6 @@ int main(int argc, char** argv)
     for (int i = 0; i < model->nfaces(); i++)
     {
         //得到一个面 三个点对应的一个面
-        // vector<int> face = model->face(i);
-        // cout << "now is ";
-        // cout << i;
-        // cout << "face" << endl;
         //--顶点阶段--
         for (int j = 0; j < 3; j++)
         {
@@ -231,7 +268,7 @@ int main(int argc, char** argv)
     }
 
     image->flip_vertically();
-    image->write_tga_file("Resources/output_class6_triangle_model_african_head_shader_4_specular.tga");
+    image->write_tga_file("Resources/output_class6dot5_triangle_model_african_head_shader_5.tga");
     delete shader;
     delete model;
     delete image;

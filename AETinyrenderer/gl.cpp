@@ -28,15 +28,15 @@ Matrix4f viewcamera(Vector3f camera_pos, Vector3f up)
     return m;
 }
 
-Matrix4f viewpotr(int width, int height)
+Matrix4f viewpotr(int x, int y, int width, int height)
 {
     Matrix4f m;
-    float w = width * .5;
-    float h = height * .5;
+    float w = width;
+    float h = height;
     m <<
-        w, 0, 0, w,
-        0, h, 0, h,
-        0, 0, 1., 0,
+        w * .5f, 0, 0, w * .5f + x,
+        0, h * .5f, 0, h * .5f + y,
+        0, 0, 1, 0,
         0, 0, 0, 1.;
     return m;
 }
